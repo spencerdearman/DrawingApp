@@ -10,7 +10,7 @@ A structure that receives input events and uses them to style points for the spa
 /// "Drawing Styles" can modify attributes such as color as the curve is drawn.
 struct SparkleBrushStyleProvider {
     struct Settings: Equatable, Hashable {
-        var initialSpeed: Float = 0.012
+        var initialSpeed: Float = 0.012 // if you make this too fast then it will just be a solid line
         var size: Float = 0.0002
         var color: SIMD3<Float> = [1, 1, 1]
     }
