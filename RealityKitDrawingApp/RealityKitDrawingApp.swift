@@ -12,7 +12,6 @@ import SwiftUI
 struct RealityKitDrawingApp: App {
     private static let paletteWindowId: String = "Palette"
     private static let configureCanvasWindowId: String = "ConfigureCanvas"
-//    private static let splashScreenWindowId: String = "SplashScreen"
     private static let immersiveSpaceWindowId: String = "ImmersiveSpace"
     
     /// The mode of the app determines which windows and immersive spaces should be open.
@@ -21,11 +20,11 @@ struct RealityKitDrawingApp: App {
         case drawing
         
         var needsImmersiveSpace: Bool {
-            return self != .chooseWorkVolume
+            return true
         }
         
         var needsSpatialTracking: Bool {
-            return self != .chooseWorkVolume
+            return true
         }
         
         fileprivate var windowId: String {
@@ -53,7 +52,7 @@ struct RealityKitDrawingApp: App {
         let oldMode = mode
         guard newMode != oldMode else { return }
         mode = newMode
-        
+
         if !immersiveSpacePresented && newMode.needsImmersiveSpace {
             immersiveSpacePresented = true
             await openImmersiveSpace(id: Self.immersiveSpaceWindowId)
@@ -73,6 +72,12 @@ struct RealityKitDrawingApp: App {
                     .environment(\.setMode, setMode)
                     .frame(width: 300, height: 300)
                     .fixedSize()
+                    .task {
+                        if !immersiveSpacePresented {
+                            await openImmersiveSpace(id: Self.immersiveSpaceWindowId)
+                            immersiveSpacePresented = true
+                        }
+                    }
             }
             .windowResizability(.contentSize)
             
@@ -88,7 +93,6 @@ struct RealityKitDrawingApp: App {
                     if mode == .chooseWorkVolume || mode == .drawing {
                         DrawingCanvasVisualizationView(settings: canvas)
                     }
-                    
                     if mode == .chooseWorkVolume {
                         DrawingCanvasPlacementView(settings: canvas)
                     } else if mode == .drawing {

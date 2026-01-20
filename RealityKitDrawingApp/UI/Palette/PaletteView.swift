@@ -28,14 +28,7 @@ struct PaletteView: View {
 
             BrushTypeView(brushState: $brushState)
                 .padding(.horizontal, 20)
-
-            Spacer()
-            
-            Divider()
-                .padding(.horizontal, 20)
-
-            PresetBrushSelectorView(brushState: $brushState)
-                .frame(minHeight: 125)
+        
         }
         .padding(.vertical, 20)
     }
