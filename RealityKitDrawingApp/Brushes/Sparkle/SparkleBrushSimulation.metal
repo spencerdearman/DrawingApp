@@ -77,7 +77,7 @@ void sparkleBrushSimulate(device const SparkleBrushParticle *particles [[buffer(
      stunning when you can mix colors and how they shift and move around.
      
      test 6: YES YES YES YES YES. Now i need to figure out how to add an immersive black background because that
-     would just make this an even better experience. 
+     would just make this an even better experience.
      
      */
     // ---- test 1 ----
@@ -93,7 +93,7 @@ void sparkleBrushSimulate(device const SparkleBrushParticle *particles [[buffer(
     //    particle.attributes.position += particle.velocity * (params.deltaTime * timeScale);
     
     // ---- test 4 ----
-    // get the direction from the particle to the center (ignoring height/Y)
+    //        get the direction from the particle to the center (ignoring height/Y)
     //        float2 centerDirection = -particle.attributes.position.xz;
     //
     //        rotate that direction 90 degrees to get a "tangent" (spin) force
@@ -107,34 +107,25 @@ void sparkleBrushSimulate(device const SparkleBrushParticle *particles [[buffer(
     
     
     // ---- test 5 ----
-    //    // 1. Calculate the distance from the center (XZ plane only)
     //    float2 posXZ = particle.attributes.position.xz;
     //    float dist = length(posXZ);
     //
-    //    // 2. Generate a "Random" number between 0.0 and 1.0 for this specific particle
-    //    // This is the magic sauce that breaks the "solid line."
     //    // It creates a unique personality for each particle based on its ID.
     //    float randomOffset = fract(sin(float(particleIdx)) * 43758.5453);
     //
-    //    // 3. Define Directions
     //    // Spin: The tangent vector (perpendicular to position)
     //    float2 spinDir = float2(-posXZ.y, posXZ.x);
     //    // Suction: Pull inward towards the center (0,0,0)
     //    float2 suctionDir = -posXZ;
     //
-    //    // 4. Calculate Force Strength
     //    // We mix the spin and suction.
     //    // We multiply by 'randomOffset' so some particles move fast, some slow.
     //    float forceStrength = 5.0 * (0.5 + 0.5 * randomOffset);
     //
-    //    // 5. Apply to Velocity
     //    // Apply spin (to rotate) + suction (to keep them in a funnel)
     //    // Adjust 0.5 to change how tight the funnel is.
     //    particle.velocity.x += (spinDir.x + suctionDir.x * 0.5) * forceStrength * params.deltaTime;
     //    particle.velocity.z += (spinDir.y + suctionDir.y * 0.5) * forceStrength * params.deltaTime;
-    //
-    //    // 6. Add Lift (Gravity in reverse)
-    //    // This makes the tornado rise.
     //    particle.velocity.y += 0.8 * params.deltaTime;
     // ------------------------
     
