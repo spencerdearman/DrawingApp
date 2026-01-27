@@ -37,7 +37,7 @@ void sparkleBrushSimulate(device const SparkleBrushParticle *particles [[buffer(
                           constant SparkleBrushSimulationParams &params [[buffer(2)]],
                           uint particleIdx [[thread_position_in_grid]])
 {
-    const bool lorenzAttroctorSimulationEnabled = false;
+    const bool lorenzAttroctorSimulationEnabled = true;
     
     if (lorenzAttroctorSimulationEnabled) {
         // LORENZ ATTRACTOR SIMULATION
@@ -47,21 +47,20 @@ void sparkleBrushSimulate(device const SparkleBrushParticle *particles [[buffer(
         
         SparkleBrushParticle particle = particles[particleIdx];
         
-        // --- 0. CONFIGURATION ---
-        // Change these numbers to move the "center" of the tornado.
+        // Configuration
         // x = 0.0 (Left/Right center)
-        // y = 1.2 (Height in meters. 1.2 is roughly chest/eye height when sitting)
-        // z = -0.5 (Depth in meters. Negative is usually "forward" away from you)
+        // y = 1.2 (Height in meters)
+        // z = -0.5 (Depth in meters)
         const float3 centerOffset = float3(0.0, 1.0, -1.0);
         
-        // Standard Lorenz constants
+        // Standard Lorenz constants.
         const float sigma = 10.0;
         const float rho = 28.0;
         const float beta = 8.0 / 3.0;
         const float scaleInput = 15.0;
         const float speedFactor = 0.6;
         
-        // relative position, getting the particle's ACTUAL world position
+        // Relative position, getting the particle's actual world position.
         float3 worldPos = particle.attributes.position;
         
         // Calculate position RELATIVE to our custom center.
@@ -81,7 +80,7 @@ void sparkleBrushSimulate(device const SparkleBrushParticle *particles [[buffer(
             relativePos = particle.attributes.position - centerOffset;
         }
         
-        // math space, scale the relative position for the math
+        // Math space, scale the relative position for the math.
         float3 p = relativePos * scaleInput;
         
         // Lorenz Equations
@@ -89,13 +88,12 @@ void sparkleBrushSimulate(device const SparkleBrushParticle *particles [[buffer(
         float dx = sigma * (p.y - p.x);
         float dy = p.x * (rho - p.z) - p.y;
         float dz = p.x * p.y - beta * p.z;
-        
         float3 lorenzForce = float3(dx, dy, dz);
         
-        // update the velocity
+        // Update the velocity.
         float3 targetVelocity = lorenzForce * speedFactor * 0.1;
         
-        // smooth blending
+        // Smooth the blending.
         particle.velocity = mix(particle.velocity, targetVelocity, 0.1);
         
         // adding the randomness
@@ -103,12 +101,12 @@ void sparkleBrushSimulate(device const SparkleBrushParticle *particles [[buffer(
         particle.velocity.y += (fract(randomVal * 10) - 0.5) * 0.5;
         particle.velocity.z += (fract(randomVal * 100) - 0.5) * 0.5;
         
-        // safety
+        // Normalize the particle velocity.
         if (length(particle.velocity) > 5.0) {
             particle.velocity = normalize(particle.velocity) * 5.0;
         }
         
-        // apply the changes
+        // Apply the changes.
         particle.attributes.position += particle.velocity * params.deltaTime;
         
         output[particleIdx] = particle;
@@ -143,17 +141,16 @@ void sparkleBrushSimulate(device const SparkleBrushParticle *particles [[buffer(
         // so that half ot eh particles sway opposite to the others
         float sway = sin(particle.attributes.position.y * 10.0 + (randomVal * 5.0));
         
-        // apply the sway to X, then a slgihtly different way using Cos to Z. This creates wandering, and floating.
+        // Apply the sway to X, then a slgihtly different way using Cos to Z. This creates wandering, and floating.
         float strength = 2.0;
         particle.velocity.x += sway * direction * strength * params.deltaTime;
         particle.velocity.z += cos(particle.attributes.position.y * 5.0) * strength * params.deltaTime;
         
-        // gentle lift upwards
+        // Add the gentle lift upwards.
         particle.velocity.y += 0.2 * params.deltaTime;
         
-        // update step
+        // Update step.
         particle.attributes.position += particle.velocity * params.deltaTime;
-        // ------------------
         
         // Write to output.
         output[particleIdx] = particle;
