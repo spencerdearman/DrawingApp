@@ -35,11 +35,8 @@ struct BrushTypeView: View {
 
     var body: some View {
         VStack {
-            Picker("Brush Type", selection: $brushState.brushType) {
-                ForEach(BrushType.allCases) { Text($0.label).tag($0) }
-            }
-            .pickerStyle(.segmented)
-            
+            Text(BrushType.sparkle.label).tag(BrushType.sparkle)
+
             ScrollView(.vertical) {
                 ZStack {
                     SparkleBrushStyleView(settings: $brushState.sparkleStyleSettings)

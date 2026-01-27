@@ -82,7 +82,7 @@ struct RealityKitDrawingApp: App {
             .windowResizability(.contentSize)
             
             WindowGroup(id: Self.paletteWindowId) {
-                PaletteView(brushState: $brushState)
+                PaletteView(brushState: $brushState, immersionStyle: $immersionStyle)
                     .frame(width: 400, height: 550, alignment: .top)
                     .fixedSize(horizontal: true, vertical: false)
             }
@@ -101,7 +101,7 @@ struct RealityKitDrawingApp: App {
                 }
                 .frame(width: 0, height: 0).frame(depth: 0)
             }
-            .immersionStyle(selection: $immersionStyle, in: .mixed)
+            .immersionStyle(selection: $immersionStyle, in: .mixed, .progressive, .full)
         }
     }
 }

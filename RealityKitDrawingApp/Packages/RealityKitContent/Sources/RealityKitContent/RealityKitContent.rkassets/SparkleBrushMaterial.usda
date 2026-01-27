@@ -73,7 +73,7 @@ def Xform "Root" (
             bool inputs:applyPostProcessToneMap = 0
             color3f inputs:color.connect = </Root/SparkleBrushMaterial/SparkleBrushColor.outputs:OutputColor>
             bool inputs:hasPremultipliedAlpha = 1
-            float inputs:opacity = 0
+            float inputs:opacity = 1
             float inputs:opacity.connect = None
             float inputs:opacityThreshold
             token outputs:out
