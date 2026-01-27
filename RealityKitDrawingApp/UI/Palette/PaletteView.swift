@@ -29,9 +29,7 @@ struct PaletteView: View {
                     // Convert the existential ImmersionStyle to our local enum
                     // Assuming .mixed and .full are the primary types we care about
                     let description = String(describing: immersionStyle)
-                    if description.contains("Full") {
-                        return .full
-                    } else if description.contains("Progressive") {
+                    if description.contains("Progressive") {
                         return .progressive
                     } else {
                         return .mixed
@@ -43,14 +41,11 @@ struct PaletteView: View {
                         immersionStyle = .mixed
                     case .progressive:
                         immersionStyle = .progressive
-                    case .full:
-                        immersionStyle = .full
                     }
                 }
             )) {
                 Text("Passthrough").tag(UIImmersionStyle.mixed)
                 Text("Dimmed").tag(UIImmersionStyle.progressive)
-                Text("Black Room").tag(UIImmersionStyle.full)
             }
             .pickerStyle(.segmented)
             .padding(.horizontal, 20)
@@ -69,7 +64,6 @@ struct PaletteView: View {
 enum UIImmersionStyle: String, CaseIterable, Identifiable {
     case mixed
     case progressive
-    case full
     
     var id: String { rawValue }
 }

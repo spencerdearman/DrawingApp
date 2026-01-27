@@ -101,7 +101,7 @@ struct RealityKitDrawingApp: App {
                 }
                 .frame(width: 0, height: 0).frame(depth: 0)
             }
-            .immersionStyle(selection: $immersionStyle, in: .mixed, .progressive, .full)
+            .immersionStyle(selection: $immersionStyle, in: .mixed, .progressive)
         }
     }
 }
